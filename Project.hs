@@ -117,7 +117,7 @@ playBattleship = do
 -- Guess the number placeholder
 playGuessTheNumber :: IO ()
 playGuessTheNumber = do
-    let num = 50 -- For simplicity, let's assume the number is always 50.
+    num <- randomRIO (1, 100)  
     putStrLn "Guess a number between 1 and 100."
     guessLoop num
   where
@@ -165,44 +165,72 @@ selectPersonality = do
             putStrLn "Invalid choice. Please select again."
             selectPersonality
 
-personalityRiddles :: Personality -> MemoryFragment
-personalityRiddles Brave = MemoryFragment 
+
+personalityRiddles :: Personality -> [MemoryFragment]
+personalityRiddles Brave = [MemoryFragment 
     "You're brave! What's always in front of you but can’t be seen?" 
     "The future." 
     "You have a fearless spirit, always looking ahead!"
-    Brave
-personalityRiddles Curious = MemoryFragment 
+    Brave]
+
+personalityRiddles Curious = [MemoryFragment 
     "You're curious! What comes once in a minute, twice in a moment, but never in a thousand years?" 
     "The letter M." 
     "Your curiosity knows no bounds, always asking questions!"
-    Curious
-personalityRiddles Logical = MemoryFragment 
-    "You're logical! If there are three apples and you take away two, how many apples do you have?" 
-    "Two." 
-    "Your logical mind is sharp, always calculating the best move!"
-    Logical
-personalityRiddles Intuitive = MemoryFragment 
+    Curious]
+
+personalityRiddles Logical = lambdaCalculusRiddles
+
+personalityRiddles Intuitive = [ MemoryFragment 
     "You're intuitive! What has a heart that doesn’t beat?" 
     "An artichoke." 
     "Your intuition guides you, always following your heart!"
-    Intuitive
+    Intuitive ]
 
-askRiddle :: MemoryFragment -> IO ()
-askRiddle memory = do
+lambdaCalculusRiddles :: [MemoryFragment]
+lambdaCalculusRiddles = [
+    MemoryFragment
+        "You encounter a strange symbols, possibly ancient text: (λx.λy.x y) (λz.z) - Is it beta reduction, if yes, what is result? (Format is: {Yes/No}, {result})"
+        "Yes, \\y.(\\z.z) y"
+        "You've solved the Lambda Calculus riddle! You understand functional abstractions."
+        Logical,
+    MemoryFragment
+        "Here's a more challenging Lambda Calculus expression: (\\x.x x) (\\x.x x). Does it have a normal form?"
+        "No"
+        "Impressive! You understand the concept of non-termination in Lambda Calculus. YOU SPEAK THE ANCIENT TONGUE"
+        Logical,
+    MemoryFragment
+        "For an advanced challenge: (\\x.\\y.x y) ((\\z.z) (\\w.w)) - Is it beta reduction, if yes, what is result? (Format is: {Yes/No}, {result})."
+        "Yes, \\y.(\\z.z) (\\w.w) y"
+        "You've mastered THE ANCIENT TONGUE. You can move on!"
+        Logical
+        ]
+
+askRiddle :: [MemoryFragment] -> IO Bool
+askRiddle [] = do
+    putStrLn "You've completed all the challenges!"
+    return True
+askRiddle (memory:memories) = do
     answer <- prompt $ question memory
     if normalizeAnswer answer == normalizeAnswer (solution memory)
-        then do 
+        then do
             putStrLn $ knowledge memory
-            playGameBasedOnPersonality $ personalityOfMemory memory
-        else do 
-            putStrLn "That's not correct. Think more and try again."
-            askRiddle memory
+            askRiddle memories
+        else do
+            putStrLn "That's not correct."
+            return False
 
 gameLoop :: IO ()
 gameLoop = do
     personality <- selectPersonality
     let memory = personalityRiddles personality
-    askRiddle memory
+    correctAnswer <- askRiddle memory
+    if not correctAnswer
+        then do
+            putStrLn "Perhaps another personality suits you better. Let's try again."
+            gameLoop
+        else
+            playGameBasedOnPersonality personality
 
 main :: IO ()
 main = gameLoop

@@ -1,10 +1,9 @@
--- DataTypes.hs
-module DataTypes where
+module Universal where
 
 import Data.Char (toLower, isAlphaNum)
-
-data Cell = Empty | X | O deriving (Eq, Show)
-type Board = [[Cell]]
+import Data.List (transpose)
+import Control.Monad (when, unless, liftM2)
+import System.Random (randomRIO)
 
 data Personality = Brave | Curious | Logical | Intuitive deriving (Show, Enum)
 
@@ -17,3 +16,8 @@ data MemoryFragment = MemoryFragment {
 
 normalizeAnswer :: String -> String
 normalizeAnswer = map toLower . filter isAlphaNum
+
+prompt :: String -> IO String
+prompt q = do
+    putStrLn q
+    getLine
