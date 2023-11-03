@@ -104,7 +104,7 @@ playBattleship = do
 -- Guess the number placeholder
 playGuessTheNumber :: IO ()
 playGuessTheNumber = do
-    let num = 50 -- For simplicity, let's assume the number is always 50.
+    num <- randomRIO (1, 100)  -- Generate a random number between 1 and 100.
     putStrLn "Guess a number between 1 and 100."
     guessLoop num
   where
@@ -176,19 +176,19 @@ personalityRiddles Intuitive = [ MemoryFragment
 lambdaCalculusRiddles :: [MemoryFragment]
 lambdaCalculusRiddles = [
     MemoryFragment
-        "You encounter a Lambda Calculus expression: (λx.λy.x y) (λz.z). What's the result?"
-        "Beta reduction, result is λy.(λz.z) y"
+        "You encounter a strange symbols, possibly ancient text: (λx.λy.x y) (λz.z) - Is it beta reduction, if yes, what is result? (Format is: {Yes/No}, {result})"
+        "Yes, \\y.(\\z.z) y"
         "You've solved the Lambda Calculus riddle! You understand functional abstractions."
         Logical,
     MemoryFragment
-        "Here's a more challenging Lambda Calculus expression: (λx.x x) (λx.x x). Simplify it."
-        "This is a non-terminating expression. It doesn't have a normal form."
-        "Impressive! You understand the concept of non-termination in Lambda Calculus."
+        "Here's a more challenging Lambda Calculus expression: (\\x.x x) (\\x.x x). Does it have a normal form?"
+        "No"
+        "Impressive! You understand the concept of non-termination in Lambda Calculus. YOU SPEAK THE ANCIENT TONGUE"
         Logical,
     MemoryFragment
-        "For an advanced challenge: (λx.λy.x y) ((λz.z) (λw.w)). Reduce this expression."
-        "Beta reduction, result is λy.(λz.z) (λw.w) y"
-        "You've mastered complex Lambda Calculus expressions. Well done!"
+        "For an advanced challenge: (\\x.\\y.x y) ((\\z.z) (\\w.w)) - Is it beta reduction, if yes, what is result? (Format is: {Yes/No}, {result})."
+        "Yes, \\y.(\\z.z) (\\w.w) y"
+        "You've mastered THE ANCIENT TONGUE. You can move on!"
         Logical
         ]
 
