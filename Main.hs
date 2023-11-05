@@ -9,6 +9,8 @@ import Universal
 
 selectPersonality :: IO Personality
 selectPersonality = do
+    putStrLn "In a desolate, post-apocalyptic world, you stand alone as the last human survivor. Amidst the ruins, you discover a mysterious, luminous tree rumored to hold the secrets of the universe and the power to bring humanity back from the brink of extinction. With newfound knowledge and a daunting mission, you embark on a perilous journey to restore our world."
+    putStrLn "To learn the secrets, you must climb from the roots of the tree to the tallest branches, and right now, you have 4 branches, each with a personality assigned to it:"
     putStrLn "Select a personality: (Select 1 for Brave, 2 for Curious etc...)"
     putStrLn "1. Brave"
     putStrLn "2. Curious"

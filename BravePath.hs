@@ -5,16 +5,13 @@ import Data.List (transpose)
 import System.Random (randomRIO)
 
 
--- Brave Riddle
 braveRiddle :: [MemoryFragment]
 braveRiddle = [MemoryFragment 
-    "You're brave! What's always in front of you but can’t be seen?" 
+    "You hear a voice: So you think you are brave! What's always in front of you but can’t be seen?" 
     "The future." 
-    "You have a fearless spirit, always looking ahead!"
+    "You have a fearless spirit! Lets see if you can beat me though!!"
     Brave]
 
--- ----------------------------------------------------------------------------------------
--- TIC TAC TOE
 data Player = Human | AI deriving (Eq, Show)
 data GameState = ContinueGame | GameOver (Maybe Player) deriving (Eq, Show)
 
@@ -23,7 +20,6 @@ data Cell = Empty | X | O deriving (Eq, Show)
 type Board = [[Cell]]
 
 
--- Board utilities
 printBoard :: Board -> IO ()
 printBoard = mapM_ (putStrLn . map cellToChar)
   where
@@ -34,7 +30,6 @@ printBoard = mapM_ (putStrLn . map cellToChar)
 initialBoard :: Board
 initialBoard = replicate 3 (replicate 3 Empty)
 
--- Making moves
 isValidMove :: Board -> (Int, Int) -> Bool
 isValidMove board (row, col) = board !! row !! col == Empty
 
@@ -44,7 +39,6 @@ makeMove board (row, col) cell =
   [take col (board !! row) ++ [cell] ++ drop (col + 1) (board !! row)] ++
   drop (row + 1) board
 
--- Checking game status
 isFull :: Board -> Bool
 isFull = all (all (/= Empty))
 
@@ -62,37 +56,11 @@ gameState board
   | isFull board        = GameOver Nothing
   | otherwise           = ContinueGame
 
--- Function to safely read an (Int, Int) without program crashing
 safeRead :: Read a => String -> Maybe a
 safeRead s = case reads s of
   [(val, "")] -> Just val
   _           -> Nothing
-  
-winRiddle :: IO ()
-winRiddle = do
-    putStrLn "You've won Tic Tac Toe! Can you solve this riddle?"
-    putStrLn "I'm light as a feather, yet the strongest man can't hold me for much more than a minute. What am I?"
-    playRiddleGame "breath" 3
 
-lossOrDrawRiddle :: IO ()
-lossOrDrawRiddle = do
-    putStrLn "You didn't win Tic Tac Toe, but can you solve this riddle?"
-    putStrLn "I speak without a voice, I am heard but not seen. I tell of the days in quiet. What am I?"
-    playRiddleGame "echo" 3
-
-playRiddleGame :: String -> Int -> IO ()
-playRiddleGame answer tries
-    | tries == 0 = putStrLn $ "Sorry, you've run out of tries. The correct answer was: " ++ answer
-    | otherwise = do
-        putStrLn $ "What is your guess? You have " ++ show tries ++ " tries left."
-        guess <- getLine
-        if guess == answer
-            then putStrLn "Correct! You solved the riddle."
-            else do
-                putStrLn "That's not correct."
-                playRiddleGame answer (tries - 1)
-
--- Improved human move function
 humanMove :: Board -> IO Board
 humanMove board = do
   putStrLn "Enter your move (row and column):"
@@ -106,7 +74,7 @@ humanMove board = do
     isValidPos (row, col) = row >= 0 && row < 3 && col >= 0 && col < 3
     invalidMove = putStrLn "Invalid move. Please enter row and column as numbers between 0 and 2, separated by a space." >> humanMove board
 
--- AI move
+
 aiMove :: Board -> IO Board
 aiMove board = do
   putStrLn "AI is making a move..."
@@ -116,7 +84,6 @@ aiMove board = do
   where
     emptyCells = [(row, col) | row <- [0..2], col <- [0..2], isValidMove board (row, col)]
 
--- Game loop
 ticTacToeLoop :: Board -> Player -> IO ()
 ticTacToeLoop board player = do
   printBoard board
@@ -138,4 +105,31 @@ playTicTacToe :: IO ()
 playTicTacToe = do
   putStrLn "Starting Tic Tac Toe!"
   ticTacToeLoop initialBoard Human
--- --------------------------------------------------------------------------------------------------
+
+  
+winRiddle :: IO ()
+winRiddle = do
+    putStrLn "You've bested me! But being strong is not everything: can you solve this riddle?"
+    putStrLn "I'm light as a feather, yet the strongest man can't hold me for much more than a minute. What am I?"
+    playRiddleGame "breath" 3
+
+lossOrDrawRiddle :: IO ()
+lossOrDrawRiddle = do
+    putStrLn "You didn't win Tic Tac Toe, but can you solve this riddle?"
+    putStrLn "I speak without a voice, I am heard but not seen. I tell of the days in quiet. What am I?"
+    playRiddleGame "echo" 3
+
+playRiddleGame :: String -> Int -> IO ()
+playRiddleGame answer tries
+    | tries == 0 = do
+        putStrLn $ "Sorry, you've run out of tries. The correct answer was: " ++ answer
+        putStrLn "The tree says: Maybe this path was not meant to you, and you fall through the branches, finding yourself at the roots. Can you gather the courage to try again?"
+    | otherwise = do
+        putStrLn $ "What is your guess? You have " ++ show tries ++ " tries left."
+        guess <- getLine
+        if guess == answer
+            then putStrLn "Correct! You solved the riddle."
+            putStrLn "The secret of the universe, as unveiled by the tree, is that it's a colossal living organism in itself. The stars are its heartbeat, the galaxies are its cells, and black holes are its cosmic thoughts. It's a sentient being with unimaginable powers.  You, as the last surviving human, are now the chosen guardian of this cosmic entity. With its secrets at your disposal, you can influence the universe's will and steer its course."
+            else do
+                putStrLn "That's not correct."
+                playRiddleGame answer (tries - 1)

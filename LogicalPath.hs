@@ -6,7 +6,6 @@ import System.Random
 import Data.List (permutations)
 import Data.Char (toLower)
 
--- Lambda Calculus Riddles
 lambdaCalculusRiddles :: [MemoryFragment]
 lambdaCalculusRiddles = [MemoryFragment
     "You encounter a strange symbols, possibly ancient text: (λx.λy.x y) (λz.z) - Is it beta reduction, if yes, what is result? (Format is: {Yes/No}, {result})"
@@ -25,7 +24,6 @@ lambdaCalculusRiddles = [MemoryFragment
     Logical
     ]
 
--- Number Guessing Game
 playGuessTheNumber :: IO ()
 playGuessTheNumber = do
     num <- randomRIO (1, 100)
@@ -71,9 +69,13 @@ playDoor = do
         "L" -> do
             putStrLn "Congratulations! You've made the right choice and found the door to freedom."
             putStrLn "You win!"
+            putStrLn "The secret of the universe, as unlocked by the tree, is a complex mathematical code embedded in the fabric of reality itself."
+            putStrLn " This code reveals that the universe operates as an intricate mathematical equation, and every celestial body, every particle, and every event is a variable in this colossal equation. As the last surviving human with this mathematical insight, you gain the ability to manipulate the equations of the universe." 
         "l" -> do
             putStrLn "Congratulations! You've made the right choice and found the door to freedom."
             putStrLn "You win!"
+            putStrLn "The secret of the universe, as unlocked by the tree, is a complex mathematical code embedded in the fabric of reality itself."
+            putStrLn " This code reveals that the universe operates as an intricate mathematical equation, and every celestial body, every particle, and every event is a variable in this colossal equation. As the last surviving human with this mathematical insight, you gain the ability to manipulate the equations of the universe." 
         _ -> do
             putStrLn "Invalid choice. Please choose either 'L' or 'R'."
             playDoor
