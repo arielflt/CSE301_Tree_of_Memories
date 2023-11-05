@@ -5,7 +5,7 @@ import Data.List (transpose, nub)
 import Control.Monad (guard, unless)
 import Universal
 
--- Curious Riddle
+
 curiousRiddle :: [MemoryFragment]
 curiousRiddle = [MemoryFragment 
     "You're curious! What comes once in a minute, twice in a moment, but never in a thousand years?" 
@@ -13,7 +13,6 @@ curiousRiddle = [MemoryFragment
     "Your curiosity knows no bounds, always asking questions!"
     Curious]
 
--- Sudoku-related code will go below
 
 parseInput :: String -> Maybe (Position, Int)
 parseInput input = case words input of
@@ -27,7 +26,6 @@ parseInput input = case words input of
 type Grid = [[Int]]
 type Position = (Int, Int)
 
--- Check if the board is valid
 isValid :: Grid -> Bool
 isValid grid = all noDuplicates (rows ++ cols ++ boxes)
   where
@@ -37,13 +35,11 @@ isValid grid = all noDuplicates (rows ++ cols ++ boxes)
     box i = [i..i+1]
     noDuplicates block = length (nub block) == length block
 
--- Find the next empty position
 nextEmpty :: Grid -> Maybe Position
 nextEmpty grid = case [(x, y) | x <- [0..3], y <- [0..3], grid !! x !! y == 0] of
                    (pos:_) -> Just pos
                    []      -> Nothing
 
--- Solve the Sudoku grid
 solveSudoku :: Grid -> [Grid]
 solveSudoku grid = case nextEmpty grid of
     Just pos -> do
@@ -53,14 +49,12 @@ solveSudoku grid = case nextEmpty grid of
       solveSudoku grid'
     Nothing -> return grid
 
--- Place a number on the Sudoku grid
 placeNumber :: Position -> Int -> Grid -> Grid
 placeNumber (x, y) n grid = 
   take x grid ++
   [take y (grid !! x) ++ [n] ++ drop (y + 1) (grid !! x)] ++
   drop (x + 1) grid
 
--- Display the grid
 displayGrid :: Grid -> IO ()
 displayGrid grid = mapM_ (putStrLn . unwords . map show) grid
 
@@ -73,9 +67,6 @@ sampleSudoku =
   , [0, 1, 2, 0]
   ]
 
--- To keep the `CuriousPath` module clean, we might not include `main` here,
--- but if you need to execute Sudoku, you could call `solveSudoku sampleSudoku`
--- from wherever you are handling your program's entry point.
 readUserInput :: IO (Maybe (Position, Int))
 readUserInput = do
   putStrLn "Enter a position (row and column) and a number (1-4), separated by spaces:"
@@ -111,6 +102,7 @@ playSudoku grid turnsLeft
   | isSolved grid = do
     displayGrid grid
     putStrLn "Congratulations, you've solved the Sudoku!"
+    putStrLn "The universe's secret, as revealed by the luminous tree, is its insatiable curiosity. You, the last human, inherit this cosmic curiosity and become an eternal explorer, fueled by an unending quest for knowledge and adventure."
   | otherwise = do
     displayGrid grid
     putStrLn $ "Turns left: " ++ show turnsLeft
@@ -130,9 +122,6 @@ playSudoku grid turnsLeft
 
 
 
-
-
--- Utility functions like `displayGrid`, `parseInput`, `isValidPlacement`, and `placeNumber` need to be defined accordingly.
 
   
  

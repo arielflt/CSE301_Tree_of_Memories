@@ -5,8 +5,6 @@ import Control.Monad (when)
 import IntuitiveGame
 
 
-
--- Intuitive Riddle
 intuitiveRiddle :: [MemoryFragment]
 intuitiveRiddle = [MemoryFragment 
     "So you think you're intuitive! I'm not alive, but I can grow; I don't have lungs, but I need air; I don't have a mouth, but water kills me. What am I" 
@@ -27,7 +25,8 @@ playGame game
         playDecipherGame 
     | isGameLost game = do
         putStrLn $ "Sorry, you've run out of attempts. The word was: " ++ wordToGuess game
-        putStrLn "You failed to solve the riddle. The game will now exit."
+        putStrLn "You failed to solve the riddle. You have one final chance"
+        playDoor
     | otherwise = do
         putStrLn $ "Word to guess: " ++ guessedWord game
         putStrLn $ "Attempts left: " ++ show (attempts game)
@@ -100,24 +99,27 @@ playDecipherGame' riddle answer tries
 playDoor :: IO ()
 playDoor = do
     putStrLn "You find yourself in a mysterious room with two doors in front of you."
-    putStrLn "One door leads to certain doom, and the other door leads to freedom."
+    putStrLn "One door leads to certain doom, and the other door leads to a branch that grants what you are looking for."
     putStrLn "You have to rely on your intuition. Will you choose the left door (L) or the right door (R)?"
 
     choice <- getLine
 
     case choice of
         "L" -> do
-            putStrLn "Oh no! You've chosen the wrong door and met a terrible fate. You lose!"
+            putStrLn "Oh no! You've chosen the wrong door and met a terrible fate. You fall down the tree!"
             putStrLn "Game over."
         "l" -> do
-            putStrLn "Oh no! You've chosen the wrong door and met a terrible fate. You lose!"
+            putStrLn "Oh no! You've chosen the wrong door and met a terrible fate. You fall down the tree!"
             putStrLn "Game over."
         "R" -> do
-            putStrLn "Congratulations! You've made the right choice and found the door to freedom."
+            putStrLn "Congratulations! You've made the right choice and found the door to your dreams!."
             putStrLn "You win!"
+            putStrLn "The secret of the universe, revealed by the tree, is that it's guided by an intricate network of cosmic intuition. As the last human, your heightened intuition lets you influence the universe's path by tapping into these intuitive connections, foreseeing events, and shaping the cosmic journey."
         "r" -> do
-            putStrLn "Congratulations! You've made the right choice and found the door to freedom."
+            putStrLn "Congratulations! You've made the right choice and found the door to your dreams!."
             putStrLn "You win!"
+            putStrLn "The secret of the universe, revealed by the tree, is that it's guided by an intricate network of cosmic intuition. As the last human, your heightened intuition lets you influence the universe's path by tapping into these intuitive connections, foreseeing events, and shaping the cosmic journey."
+
         _ -> do
             putStrLn "Invalid choice. Please choose either 'L' or 'R'."
             playDoor
