@@ -72,7 +72,7 @@ humanMove board = do
     Nothing -> invalidMove
   where
     isValidPos (row, col) = row >= 0 && row < 3 && col >= 0 && col < 3
-    invalidMove = putStrLn "Invalid move. Please enter row and column as numbers between 0 and 2, separated by a space." >> humanMove board
+    invalidMove = putStrLn "Invalid move. Please enter row and column as numbers between 0 and 2, separated by a comma." >> humanMove board
 
 
 aiMove :: Board -> IO Board
