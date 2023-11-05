@@ -127,9 +127,9 @@ playRiddleGame answer tries
     | otherwise = do
         putStrLn $ "What is your guess? You have " ++ show tries ++ " tries left."
         guess <- getLine
-        if guess == answer
-            then putStrLn "Correct! You solved the riddle."
-            putStrLn "The secret of the universe, as unveiled by the tree, is that it's a colossal living organism in itself. The stars are its heartbeat, the galaxies are its cells, and black holes are its cosmic thoughts. It's a sentient being with unimaginable powers.  You, as the last surviving human, are now the chosen guardian of this cosmic entity. With its secrets at your disposal, you can influence the universe's will and steer its course."
-            else do
-                putStrLn "That's not correct."
-                playRiddleGame answer (tries - 1)
+        if guess == answer then do
+            putStrLn "Correct! You solved the riddle."
+            putStrLn "The secret of the universe, as unveiled by the tree, is that it's a colossal living organism in itself. The stars are its heartbeat, the galaxies are its cells, and black holes are its cosmic thoughts. It's a sentient being with unimaginable powers. You, as the last surviving human, are now the chosen guardian of this cosmic entity. With its secrets at your disposal, you can influence the universe's will and steer its course."
+        else do
+            putStrLn "That's not correct."
+            playRiddleGame answer (tries - 1)
