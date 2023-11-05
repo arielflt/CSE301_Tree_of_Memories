@@ -28,26 +28,31 @@ lambdaCalculusRiddles = [MemoryFragment
 -- Number Guessing Game
 playGuessTheNumber :: IO ()
 playGuessTheNumber = do
-    num <- randomRIO (1, 100)
+    num <- randomRIO (1, 100) :: IO Int
     putStrLn "Guess a number between 1 and 100."
     guessLoop num 10  -- Start with 10 guesses
   where
     guessLoop :: Int -> Int -> IO ()
     guessLoop num 0 = do
-        putStrLn $ "Out of guesses. The correct number was " ++ show num ++ ".
+        putStrLn $ "Out of guesses. The correct number was " ++ show num ++ "."
     guessLoop num guessesRemaining = do
         putStrLn $ "You have " ++ show guessesRemaining ++ " guesses remaining."
         guessStr <- getLine
-        let guess = read guessStr :: Int
-        if guess < num then do
-            putStrLn "Too low! Guess again."
-            guessLoop num (guessesRemaining - 1)
-        else if guess > num then do
-            putStrLn "Too high! Guess again."
-            guessLoop num (guessesRemaining - 1)
-        else do
-            putStrLn "Correct! You win!"
-            playDoor
+        case reads guessStr :: [(Int, String)] of
+          [(guess, "")] ->
+            if guess < num then do
+              putStrLn "Too low! Guess again."
+              guessLoop num (guessesRemaining - 1)
+            else if guess > num then do
+              putStrLn "Too high! Guess again."
+              guessLoop num (guessesRemaining - 1)
+            else do
+              putStrLn "Correct! You win!"
+              playDoor
+          _ -> do
+            putStrLn "That's not a valid number, try again."
+            guessLoop num guessesRemaining
+
 
 
 playDoor :: IO ()
