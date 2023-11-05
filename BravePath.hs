@@ -1,7 +1,6 @@
 module BravePath where
-
+import Control.Exception (catch, SomeException)
 import Universal
-
 import Data.List (transpose)
 import System.Random (randomRIO)
 
@@ -63,14 +62,25 @@ gameState board
   | isFull board        = GameOver Nothing
   | otherwise           = ContinueGame
 
+-- Function to safely read an (Int, Int) without program crashing
+safeRead :: Read a => String -> Maybe a
+safeRead s = case reads s of
+  [(val, "")] -> Just val
+  _           -> Nothing
 
+-- Improved human move function
 humanMove :: Board -> IO Board
 humanMove board = do
-  move <- prompt "Enter your move (row and column): "
-  let pos = read ("(" ++ move ++ ")") :: (Int, Int)
-  if isValidMove board pos
-    then return $ makeMove board pos X
-    else putStrLn "Invalid move." >> humanMove board
+  putStrLn "Enter your move (row and column):"
+  move <- getLine
+  case safeRead ("(" ++ move ++ ")") :: Maybe (Int, Int) of
+    Just pos -> if isValidPos pos && isValidMove board pos
+                  then return $ makeMove board pos X
+                  else invalidMove
+    Nothing -> invalidMove
+  where
+    isValidPos (row, col) = row >= 0 && row < 3 && col >= 0 && col < 3
+    invalidMove = putStrLn "Invalid move. Please enter row and column as numbers between 0 and 2, separated by a space." >> humanMove board
 
 -- AI move
 aiMove :: Board -> IO Board
