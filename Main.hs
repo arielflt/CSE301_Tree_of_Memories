@@ -59,7 +59,7 @@ playGameBasedOnPersonality personality = case personality of
     Logical   -> playGuessTheNumber
     Brave     -> playTicTacToe
     Curious   -> playBattleship
-    Intuitive -> playCardPickGame
+    Intuitive -> playIntuitiveGame
 
 
 

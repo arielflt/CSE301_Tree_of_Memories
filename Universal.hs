@@ -21,3 +21,5 @@ prompt :: String -> IO String
 prompt q = do
     putStrLn q
     getLine
+
+
