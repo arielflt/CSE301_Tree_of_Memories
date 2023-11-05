@@ -56,10 +56,11 @@ main = gameLoop
 
 playGameBasedOnPersonality :: Personality -> IO ()
 playGameBasedOnPersonality personality = case personality of
-    Logical   -> playGuessTheNumber
-    Brave     -> playTicTacToe
-    Curious   -> playBattleship
-    Intuitive -> playIntuitiveGame
+    Logical   -> playGuessTheNumber -- Assuming this is already defined
+    Brave     -> playTicTacToe -- Assuming this is already defined
+    Curious   -> playSudoku sampleSudoku -- Pass the predefined Sudoku grid here
+    Intuitive -> playIntuitiveGame -- Assuming this is already defined
+
 
 
 
