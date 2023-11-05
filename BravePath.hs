@@ -63,6 +63,30 @@ gameState board
   | isFull board        = GameOver Nothing
   | otherwise           = ContinueGame
 
+winRiddle :: IO ()
+winRiddle = do
+    putStrLn "You've won Tic Tac Toe! Can you solve this riddle?"
+    putStrLn "I'm light as a feather, yet the strongest man can't hold me for much more than a minute. What am I?"
+    playRiddleGame "breath" 3
+
+lossOrDrawRiddle :: IO ()
+lossOrDrawRiddle = do
+    putStrLn "You didn't win Tic Tac Toe, but can you solve this riddle?"
+    putStrLn "I speak without a voice, I am heard but not seen. I tell of the days in quiet. What am I?"
+    playRiddleGame "echo" 3
+
+playRiddleGame :: String -> Int -> IO ()
+playRiddleGame answer tries
+    | tries == 0 = putStrLn $ "Sorry, you've run out of tries. The correct answer was: " ++ answer
+    | otherwise = do
+        putStrLn $ "What is your guess? You have " ++ show tries ++ " tries left."
+        guess <- getLine
+        if guess == answer
+            then putStrLn "Correct! You solved the riddle."
+            else do
+                putStrLn "That's not correct."
+                playRiddleGame answer (tries - 1)
+
 
 humanMove :: Board -> IO Board
 humanMove board = do
@@ -87,13 +111,18 @@ ticTacToeLoop :: Board -> Player -> IO ()
 ticTacToeLoop board player = do
   printBoard board
   case gameState board of
-    GameOver winner -> putStrLn $ case winner of
-                                    Just Human -> "Congratulations, you win!"
-                                    Just AI    -> "AI wins!"
-                                    Nothing    -> "It's a draw!"
+    GameOver winner -> do
+        putStrLn $ case winner of
+                        Just Human -> "Congratulations, you win!"
+                        Just AI    -> "AI wins!"
+                        Nothing    -> "It's a draw!"
+        case winner of
+            Just Human -> winRiddle -- Player wins, proceed to the win riddle
+            _          -> lossOrDrawRiddle -- It's either a draw or AI wins, proceed to the loss/draw riddle
     ContinueGame   -> case player of
                         Human -> humanMove board >>= \newBoard -> ticTacToeLoop newBoard AI
                         AI    -> aiMove board    >>= \newBoard -> ticTacToeLoop newBoard Human
+
 
 playTicTacToe :: IO ()
 playTicTacToe = do
