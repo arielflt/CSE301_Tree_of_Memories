@@ -58,7 +58,7 @@ playGameBasedOnPersonality :: Personality -> IO ()
 playGameBasedOnPersonality personality = case personality of
     Logical   -> playGuessTheNumber -- Assuming this is already defined
     Brave     -> playTicTacToe -- Assuming this is already defined
-    Curious   -> playSudoku sampleSudoku -- Pass the predefined Sudoku grid here
+    Curious   -> playSudoku sampleSudoku 15 -- Pass the predefined Sudoku grid here
     Intuitive -> playIntuitiveGame -- Assuming this is already defined
 
 

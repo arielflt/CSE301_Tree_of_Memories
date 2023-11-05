@@ -103,22 +103,34 @@ getBox x y grid =
 isValidPlacement :: Position -> Int -> Grid -> Bool
 isValidPlacement (x, y) n grid = all (notElem n) [grid !! x, transpose grid !! y, getBox x y grid]
 
-playSudoku :: Grid -> IO ()
-playSudoku grid = do
-  displayGrid grid
-  unless (isSolved grid) $ do
+playSudoku :: Grid -> Int -> IO ()
+playSudoku grid turnsLeft
+  | turnsLeft == 0 = do
+    putStrLn "Sorry, you've run out of turns. You lose!"
+    return ()
+  | isSolved grid = do
+    displayGrid grid
+    putStrLn "Congratulations, you've solved the Sudoku!"
+  | otherwise = do
+    displayGrid grid
+    putStrLn $ "Turns left: " ++ show turnsLeft
     putStrLn "Enter a position (row and column) and a number (1-4), separated by spaces:"
     input <- getLine
     case parseInput input of
       Just ((r, c), n) ->
         if isValidPlacement (r, c) n grid then
-          playSudoku (placeNumber (r, c) n grid)
+          playSudoku (placeNumber (r, c) n grid) (turnsLeft - 1)
         else do
           putStrLn "Invalid placement. Try again."
-          playSudoku grid
+          playSudoku grid (turnsLeft - 1)  -- Deduct a turn for an invalid placement
       Nothing -> do
         putStrLn "Invalid input. Please enter the row, column, and number separated by spaces."
-        playSudoku grid
+        playSudoku grid turnsLeft
+
+
+
+
+
 
 -- Utility functions like `displayGrid`, `parseInput`, `isValidPlacement`, and `placeNumber` need to be defined accordingly.
 
